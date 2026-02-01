@@ -1,218 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Club/Organization Application</title>
+<meta charset="UTF-8">
+<title>Club/Organization Application</title>
 
-    <style>
-    body {
-        font-family: "Segoe UI", Arial, sans-serif;
-        background: linear-gradient(135deg, #eef2f7, #dbe7ff);
-        min-height: 100vh;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    form {
-        width: 100%;
-        max-width: 520px;
-        background-color: #ffffff;
-        padding: 30px;
-        border-radius: 12px;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-    }
-
-    fieldset {
-        border: none;
-        margin-bottom: 25px;
-        padding: 0;
-    }
-
-    legend {
-        font-size: 1.1rem;
-        font-weight: 600;
-        margin-bottom: 15px;
-        color: #333;
-    }
-
-    label {
-        display: block;
-        margin-bottom: 16px;
-        font-size: 0.9rem;
-        color: #444;
-    }
-
-    input,
-    select,
-    textarea {
-        width: 100%;
-        padding: 10px 12px;
-        margin-top: 6px;
-        border-radius: 8px;
-        border: 1px solid #ccc;
-        font-size: 0.9rem;
-        transition: border-color 0.2s, box-shadow 0.2s;
-    }
-
-    /* focus effect */
-    input:focus,
-    select:focus,
-    textarea:focus {
-        border-color: #4f7cff;
-        box-shadow: 0 0 0 3px rgba(79, 124, 255, 0.2);
-        outline: none;
-    }
-
-    /* radio buttons spacing */
-    input[type="radio"] {
-        width: auto;
-        margin-right: 5px;
-        margin-left: 10px;
-    }
-
-    /* error style */
-    .invalid {
-        border-color: #e63946;
-        background-color: #fff1f1;
-    }
-
-    .buttons {
-        display: flex;
-        justify-content: space-between;
-        margin-top: 10px;
-    }
-
-    input[type="submit"],
-    input[type="reset"] {
-        width: 48%;
-        padding: 10px;
-        border-radius: 8px;
-        border: none;
-        font-size: 0.9rem;
-        cursor: pointer;
-        transition: background-color 0.2s;
-    }
-
-    input[type="submit"] {
-        background-color: #4f7cff;
-        color: #ffffff;
-    }
-
-    input[type="submit"]:hover {
-        background-color: #3b66e0;
-    }
-
-    input[type="reset"] {
-        background-color: #e0e0e0;
-    }
-
-    input[type="reset"]:hover {
-        background-color: #cfcfcf;
-    }
-    </style>
-
-    <script>
-        function confirmSubmit() {
-            return confirm("Do you want to submit your application?");
-        }
-
-        function confirmReset() {
-            return confirm("Do you want to reset all the information?");
-        }
-
-        function validateInput(element) {
-            if (element.value.trim() === "") {
-                element.classList.add("invalid");
-            } else {
-                element.classList.remove("invalid");
-            }
-        }
-    </script>
+<style>
+/* same styling you made */
+body {
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(135deg, #eef2f7, #dbe7ff);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+form {
+    width: 100%;
+    max-width: 520px;
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+fieldset { border: none; margin-bottom: 25px; padding: 0; }
+legend { font-size: 1.1rem; font-weight: 600; margin-bottom: 15px; }
+label { display: block; margin-bottom: 16px; font-size: 0.9rem; }
+input, select, textarea {
+    width: 100%; padding: 10px; margin-top: 6px;
+    border-radius: 8px; border: 1px solid #ccc;
+}
+.invalid { border-color: red; background: #ffecec; }
+.buttons { display: flex; gap: 10px; }
+button { padding: 10px; border-radius: 8px; border: none; cursor: pointer; }
+.submitBtn { background: #4f7cff; color: white; }
+.resetBtn { background: #ccc; }
+.viewBtn { background: #222; color: white; width: 100%; margin-top: 10px; }
+</style>
 </head>
 
 <body>
 
-<form method="post" action="submit"
-      onsubmit="return confirmSubmit()"
-      onreset="return confirmReset()">
+<form id="appForm" onsubmit="saveData(event)" onreset="return confirmReset()">
 
-    <fieldset>
-        <legend>Personal Information</legend>
+<fieldset>
+<legend>Personal Information</legend>
+<label>Student ID <input type="number" id="studentId" required onblur="validateInput(this)"></label>
+<label>Full Name <input type="text" id="fullName" required onblur="validateInput(this)"></label>
+<label>Birthday <input type="date" id="birthday" required></label>
+<label>Email Address <input type="email" id="email" required onblur="validateInput(this)"></label>
+</fieldset>
 
-        <label>
-            Student ID
-            <input type="number" required onblur="validateInput(this)">
-        </label>
+<fieldset>
+<legend>Application Details</legend>
+<label>Mobile Phone <input type="text" id="phone" required onblur="validateInput(this)"></label>
 
-        <label>
-            Full Name
-            <input type="text" required onblur="validateInput(this)">
-        </label>
+<label>Grade Level
+<select id="grade" required>
+<option value="">Select grade</option>
+<option>Grade 7</option><option>Grade 8</option>
+<option>Grade 9</option><option>Grade 10</option>
+<option>Grade 11</option><option>Grade 12</option>
+</select>
+</label>
 
-        <label>
-            Birthday
-            <input type="date" required>
-        </label>
+<label>Intern / Extern<br>
+<input type="radio" name="type" value="Intern" required> Intern
+<input type="radio" name="type" value="Extern"> Extern
+</label>
 
-        <label>
-            Email Address
-            <input type="email" required onblur="validateInput(this)">
-        </label>
-    </fieldset>
+<label>Preferred Organization / Club
+<select id="club" required>
+<option value="">Select club</option>
+<option>Bake Club</option>
+<option>Himig Agham</option>
+<option>Tech Society</option>
+<option>Arts Guild</option>
+<option>Sports Club</option>
+</select>
+</label>
 
-    <fieldset>
-        <legend>Application Details</legend>
+<label>Why do you want to join?
+<textarea id="reason" rows="4" required onblur="validateInput(this)"></textarea>
+</label>
+</fieldset>
 
-        <label>
-            Mobile Phone
-            <input type="text" required onblur="validateInput(this)">
-        </label>
+<div class="buttons">
+<button type="submit" class="submitBtn">Submit</button>
+<button type="reset" class="resetBtn">Reset</button>
+</div>
 
-        <label>
-            Grade Level
-            <select required>
-                <option value="">Select grade</option>
-                <option value="g7">Grade 7</option>
-                <option value="g8">Grade 8</option>
-                <option value="g9">Grade 9</option>
-                <option value="g10">Grade 10</option>
-                <option value="g11">Grade 11</option>
-                <option value="g12">Grade 12</option>
-            </select>
-        </label>
-
-        <label>
-            Intern / Extern
-            <br>
-            <input type="radio" name="type" value="int" required> Intern
-            <input type="radio" name="type" value="ext"> Extern
-        </label>
-
-        <label>
-            Preferred Organization / Club
-            <select required>
-                <option value="">Select club</option>
-                <option value="sci">Science Club</option>
-                <option value="tech">Tech Society</option>
-                <option value="arts">Arts Guild</option>
-                <option value="sports">Sports Club</option>
-                <option value="media">Media Team</option>
-            </select>
-        </label>
-
-        <label>
-            Why do you want to join?
-            <textarea rows="4" required onblur="validateInput(this)"></textarea>
-        </label>
-    </fieldset>
-
-    <div class="buttons">
-        <input type="submit" value="Submit">
-        <input type="reset" value="Reset">
-    </div>
-
+<button type="button" class="viewBtn" onclick="window.location.href='viewSignUps.html'">View Sign-ups</button>
 </form>
+
+<script>
+function confirmReset() {
+    return confirm("Do you want to reset all the information?");
+}
+
+function validateInput(el) {
+    el.classList.toggle("invalid", el.value.trim() === "");
+}
+
+function saveData(event) {
+    event.preventDefault();
+
+    if (!confirm("Do you want to submit your application?")) return;
+
+    const signup = {
+        club: club.value,
+        id: studentId.value,
+        fullname: fullName.value,
+        grade: grade.value,
+        email: email.value,
+        mobile: phone.value,
+        type: document.querySelector('input[name="type"]:checked').value
+    };
+
+    let list = localStorage.getItem("clubSignUps");
+    list = list ? JSON.parse(list) : [];
+
+    list.push(signup);
+    localStorage.setItem("clubSignUps", JSON.stringify(list));
+
+    alert("Application saved!");
+    appForm.reset();
+}
+</script>
 
 </body>
 </html>
