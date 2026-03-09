@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Movie Rating</title>
+<style>
+    body { font-family: sans-serif; background: #f9f9f9; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+    .form-container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 350px; }
+    input, select { width: 100%; padding: 8px; margin: 10px 0; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; }
+    button { width: 100%; padding: 10px; background: #007bff; color: white; border: none; border-radius: 4px; cursor: pointer; }
+    button.delete-btn { background: #dc3545; margin-top: 10px; font-size: 12px; }
+    
+    .star { cursor: pointer; color: #ddd; font-size: 24px; }
+    .star.selected { color: gold; }
+    .gold-star { color: gold; }
+    
+    .movie-card { background: white; padding: 15px; border-radius: 4px; margin-top: 10px; width: 350px; border-left: 5px solid #007bff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+</style>
+</head>
+<body>
+
+<div class="form-container">
+    <h2>Add a Movie</h2>
+    <input type="text" id="title" placeholder="Title">
+    <input type="number" id="year" placeholder="Year">
+    <select id="genre">
+        <option>Action</option>
+        <option>Comedy</option>
+        <option>Drama</option>
+        <option>Sci-Fi</option>
+    </select>
+    <p>Rating:</p>
+    <div id="star-rating">
+        <span class="star" data-value="1">★</span>
+        <span class="star" data-value="2">★</span>
+        <span class="star" data-value="3">★</span>
+        <span class="star" data-value="4">★</span>
+        <span class="star" data-value="5">★</span>
+    </div>
+    <button id="add-btn" style="margin-top: 15px;">Add Movie</button>
+</div>
+
+<h3>Movie List</h3>
+<div id="movie-list"></div>
+
+<script>
+    let currentRating = 0;
+    const stars = document.querySelectorAll('.star');
+
+    stars.forEach(star => {
+        star.addEventListener('click', function() {
+            currentRating = parseInt(this.getAttribute('data-value'));
+            stars.forEach((s, idx) => {
+                s.classList.toggle('selected', idx < currentRating);
+            });
+        });
+    });
+
+    function displayMovies() {
+        const listDiv = document.getElementById('movie-list');
+        listDiv.innerHTML = '';
+        const movies = JSON.parse(localStorage.getItem('movies') || '[]');
+        
+        movies.forEach((m, index) => {
+            const div = document.createElement('div');
+            div.className = 'movie-card';
+            div.innerHTML = `
+                ${m.title} (${m.year}) - ${m.genre}, Rating: <span class="gold-star">${'★'.repeat(m.rating)}</span>
+                <br><button class="delete-btn" onclick="deleteMovie(${index})">Delete</button>
+            `;
+            listDiv.appendChild(div);
+        });
+    }
+
+    function deleteMovie(index) {
+        const movies = JSON.parse(localStorage.getItem('movies') || '[]');
+        movies.splice(index, 1);
+        localStorage.setItem('movies', JSON.stringify(movies));
+        displayMovies();
+    }
+
+    document.getElementById('add-btn').addEventListener('click', () => {
+        const title = document.getElementById('title').value;
+        const year = document.getElementById('year').value;
+        const genre = document.getElementById('genre').value;
+
+        if (!title || !year || currentRating === 0) return alert("Fill all fields!");
+
+        const movies = JSON.parse(localStorage.getItem('movies') || '[]');
+        movies.push({ title, year, genre, rating: currentRating.toString() });
+        localStorage.setItem('movies', JSON.stringify(movies));
+        
+        displayMovies();
+
+        document.getElementById('title').value = '';
+        document.getElementById('year').value = '';
+        currentRating = 0;
+        stars.forEach(s => s.classList.remove('selected'));
+    });
+
+    displayMovies();
+</script>
+
+</body>
+</html>
